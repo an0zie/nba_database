@@ -42,7 +42,7 @@ nba_etl/
 ## ⚙️ How It Works
 
 ### Extract
-Connects to the official NBA API using the `nba_api` Python package and pulls per-game player statistics for the 2023-24 season. No web scraping involved — data comes directly from the NBA's own data system.
+Connects to the official NBA API using the `nba_api` Python package and pulls per-game player statistics for any season you choose. When you run the pipeline, it will prompt you to type the season you want directly in the terminal. No web scraping involved — data comes directly from the NBA's own data system.
 
 ### Transform
 Cleans the raw data by:
@@ -86,15 +86,18 @@ python main.py
 
 ## 📊 Output
 
-After running the pipeline you will see output like this in your terminal:
+After running the pipeline you will be prompted to choose a season, then see output like this:
 
 ```
-2026-04-20 03:53:42 [INFO] Starting extraction for season 2023-24...
-2026-04-20 03:53:43 [INFO] Extracted 572 rows.
+Available seasons: 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24
+Enter the season you want (e.g. 2023-24): 2022-23
+
+Fetching NBA stats for 2022-23...
+2026-04-20 03:53:42 [INFO] Extracted 572 rows for season 2022-23.
 2026-04-20 03:53:43 [INFO] Starting transformation...
-2026-04-20 03:53:43 [INFO] After cleaning: 572 rows.
+2026-04-20 03:53:43 [INFO] After cleaning: 560 rows.
 2026-04-20 03:53:43 [INFO] Loading to database...
-2026-04-20 03:53:44 [INFO] ETL complete!
+2026-04-20 03:53:44 [INFO] ETL complete for season 2022-23!
 ```
 
 Two files will be generated in your project folder:
@@ -138,14 +141,16 @@ print(df)
 
 ---
 
-## 🔄 Changing the Season
+## 🎮 Interactive Season Selection
 
-To pull data for a different season, update the season parameter in `main.py`:
+When you run the pipeline it will automatically ask you which season you want:
 
-```python
-# Change "2023-24" to any valid NBA season format
-raw_df = extract_nba_stats("2022-23")
 ```
+Available seasons: 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24
+Enter the season you want (e.g. 2023-24):
+```
+
+Just type the season in the format shown and press Enter. The pipeline will fetch, clean and load that season's data automatically. You can run it multiple times with different seasons to compare data across years.
 
 ---
 
@@ -153,6 +158,7 @@ raw_df = extract_nba_stats("2022-23")
 
 - **ETL pipeline architecture** — separation of extract, transform, and load into distinct modules
 - **API data ingestion** — connecting to and consuming a real-world sports data API
+- **Interactive user input** — terminal prompts that let the user choose which season to load
 - **Data cleaning** — handling duplicates, selecting columns, and resetting indexes
 - **Database loading** — writing structured data to a relational database using SQLAlchemy
 - **Pipeline logging** — professional monitoring of each stage with timestamps
